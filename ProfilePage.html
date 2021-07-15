@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700&display=swap" rel="stylesheet">
+
+
+    <style>
+        body{
+            background-color:#f5f8fa;
+            background-size: cover;
+
+        }
+
+        .buttonFloat{
+            height: 100%;
+            overflow: hidden;
+
+        }
+
+        .buttonFloat button{
+            float: right;
+        }
+
+        .navbar-light i{
+            font-size: 50px;
+        }
+
+        .testimonial{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 100px;
+        }
+
+        .btn-outline-primary i{
+          font-size: 50px;
+
+        }
+
+        .mycontainer{
+          margin-left: 500px;
+
+        }
+
+        .cont{
+          border-bottom: 3px solid black;
+        }
+
+        .increasefont{
+          font-family: 'Playfair Display', serif;
+          font-size: 40px;
+        }
+
+        .noPost h4{
+            margin-left: 425px;
+            font-size: 40px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <i class="fab fa-instagram"></i>
+
+
+        <div class="buttonFloat">
+            <button onclick="location.href = '{{logout_url}}';" type="button"
+                    class="btn btn-outline-primary mr-2">Logout</button>
+            <button onclick="location.href = '/';" type="button"
+                    class="btn btn-outline-primary mr-2">TimeLine</button>
+            <form action="/searchHandler" method="get" class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container cont pb-5">
+      <div class="row">
+         <div class="col mt-5 increasefont">
+           {{myuser.name}}
+         </div>
+         <div class="buttonFloat mt-3">
+          <button onclick="location.href = '/followerListHandler?key_id={{myuser.key.id()}}';" type="button" class="btn btn-primary mt-5 mr-2">
+            Followers <span class="badge badge-light">{{follower_size}}</span>
+            <span class="sr-only">unread messages</span>
+          </button>
+
+          <button onclick="location.href = '/followListHandler?key_id={{myuser.key.id()}}';" type="button" class="btn btn-primary mt-5 mr-2">
+            Following <span class="badge badge-light">{{follow_size}}</span>
+            <span class="sr-only">unread messages</span>
+          </button>
+         </div>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="container mt-2">
+        {% if my_post_obj|length != 0 %}
+        <div class="row">
+            <div class="col">
+            <div class="testimonial m-5">
+                {% for i in my_post_obj %}
+                <div class="card mb-3" style="width: 18rem;">
+                    <img class="card-img-top" src="/downloadHandler?blobkeyid={{i.pic}}" alt="Card image cap">
+                    <div class="card-body">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">{{i.caption}}</p>
+                      <a href="/viewCommentHandler?postKeyId={{i.key.id()}}" class="btn btn-primary mt-2">
+                          View Comments</a>
+                      <a href="/addCommentsHandler?postKeyId={{i.key.id()}}&name={{myuser.name}}" class="btn btn-primary mt-2">
+                          Add Comments</a>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        </div>
+
+        {% else %}
+        <div class="row">
+            <div class="col noPost mb-5">
+                <h4>No Posts Yet</h4>
+
+            </div>
+        </div>
+
+        {% endif %}
+
+
+
+        <div class="row">
+          <div class="col">
+          <div class="mycontainer">
+            <div class="upload">
+            <form id="form" action="{{upload_url}}" method="post" enctype="multipart/form-data">
+            <label class="btn btn-outline-primary">
+              <i class="fas fa-arrow-circle-up" style="display: inline;"></i> <input id="file" name="file" type="file" hidden>
+            </label>
+
+          </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/e7926f2306.js" crossorigin="anonymous"></script>
+
+    <script>
+      document.getElementById("file").onchange = function() {
+        document.getElementById("form").submit();
+      };
+    </script>
+</body>
+</html>
